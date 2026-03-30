@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ORBITER – AI Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080c10; --surface: #0d1117; --border: #1e2a38;
+      --accent: #00d4ff; --accent2: #7b61ff; --text: #c9d6e3; --muted: #4a5a6a;
+      --ai-color: #4fffb0; --user-bg: #0f2033; --ai-bg: #0a1a0d;
+      --nav-h: 62px; --radius: 14px;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; overflow: hidden; }
+
+    #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,.55) 0%,transparent 100%),
+        radial-gradient(1px 1px at 78% 8%,  rgba(255,255,255,.4)  0%,transparent 100%),
+        radial-gradient(1px 1px at 53% 60%, rgba(255,255,255,.5)  0%,transparent 100%),
+        radial-gradient(1px 1px at 8%  78%, rgba(255,255,255,.35) 0%,transparent 100%),
+        radial-gradient(1px 1px at 88% 52%, rgba(255,255,255,.45) 0%,transparent 100%),
+        radial-gradient(1.5px 1.5px at 33% 88%, rgba(255,255,255,.3) 0%,transparent 100%),
+        radial-gradient(1px 1px at 68% 38%, rgba(255,255,255,.6)  0%,transparent 100%),
+        radial-gradient(2px 2px at 4%  48%, rgba(0,212,255,.25)   0%,transparent 100%); }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
+      background: rgba(8,12,16,.88); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 1.05rem;
+      letter-spacing: .15em; color: var(--accent); text-decoration: none;
+      display: flex; align-items: center; gap: 10px; }
+    .nav-logo-icon { font-size: 1.3rem; animation: pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;text-shadow:0 0 10px var(--accent)} 50%{opacity:.5;text-shadow:none} }
+    nav ul { list-style: none; display: flex; gap: 4px; }
+    nav ul li a { display: block; padding: 6px 14px; border-radius: 8px; font-size: .82rem;
+      font-weight: 600; letter-spacing: .04em; color: var(--muted); text-decoration: none;
+      transition: color .2s, background .2s; }
+    nav ul li a:hover, nav ul li a.active { color: var(--accent); background: rgba(0,212,255,.08); }
+
+    /* LAYOUT */
+    .page { position: relative; z-index: 1; height: 100vh; padding-top: var(--nav-h);
+      display: flex; flex-direction: column; }
+
+    /* HEADER */
+    .chat-header { flex-shrink: 0; padding: 14px 28px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 14px; background: rgba(8,12,16,.5); }
+    .status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ai-color);
+      box-shadow: 0 0 8px var(--ai-color); animation: blink 1.8s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .chat-header-info h2 { font-size: .95rem; font-weight: 800; color: #fff; letter-spacing: .06em; }
+    .chat-header-info p  { font-family: 'Space Mono', monospace; font-size: .63rem; color: var(--muted); margin-top: 2px; letter-spacing: .04em; }
+    .badge { margin-left: auto; font-family: 'Space Mono', monospace; font-size: .63rem;
+      color: var(--ai-color); border: 1px solid rgba(79,255,176,.3);
+      padding: 4px 10px; border-radius: 20px; letter-spacing: .06em; white-space: nowrap; }
+
+    /* SETUP BANNER */
+    #setupBanner { flex-shrink: 0; background: rgba(123,97,255,.1);
+      border-bottom: 1px solid rgba(123,97,255,.25);
+      padding: 14px 28px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    #setupBanner p { font-size: .82rem; color: #c9b8ff; flex: 1; min-width: 200px; line-height: 1.5; }
+    #setupBanner a { color: var(--accent); text-decoration: underline; }
+    #setupBanner strong { color: #fff; }
+    .key-row { display: flex; gap: 8px; flex: 2; min-width: 260px; }
+    #keyInput { flex: 1; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 12px; color: #fff;
+      font-family: 'Space Mono', monospace; font-size: .78rem;
+      outline: none; transition: border-color .2s; }
+    #keyInput:focus { border-color: var(--accent2); }
+    #keyInput::placeholder { color: var(--muted); }
+    #saveKeyBtn { background: var(--accent2); color: #fff; border: none; border-radius: 8px;
+      padding: 8px 18px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .82rem;
+      cursor: pointer; white-space: nowrap; transition: background .2s; }
+    #saveKeyBtn:hover { background: #9580ff; }
+
+    /* MESSAGES */
+    #chat { flex: 1; overflow-y: auto; padding: 24px 28px;
+      display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+    #chat::-webkit-scrollbar { width: 4px; }
+    #chat::-webkit-scrollbar-track { background: transparent; }
+    #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    .welcome { margin: auto; text-align: center; max-width: 440px; padding: 40px 28px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      background: rgba(13,17,23,.75); animation: fadeUp .5s ease both; }
+    .welcome .w-icon { font-size: 2.8rem; display: block; margin-bottom: 14px; animation: spin 14s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .welcome h2 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .welcome p  { font-size: .86rem; color: var(--muted); line-height: 1.65; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 18px; }
+    .chip { background: rgba(0,212,255,.06); border: 1px solid rgba(0,212,255,.18);
+      color: var(--accent); font-family: 'Syne', sans-serif; font-size: .76rem; font-weight: 600;
+      padding: 6px 13px; border-radius: 20px; cursor: pointer;
+      transition: background .2s, border-color .2s; }
+    .chip:hover { background: rgba(0,212,255,.13); border-color: var(--accent); }
+
+    .msg { display: flex; gap: 10px; animation: fadeUp .28s ease both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .msg.user { flex-direction: row-reverse; }
+
+    .av { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace; font-size: .65rem; font-weight: 700; }
+    .msg.ai    .av { background: rgba(79,255,176,.1);  color: var(--ai-color); border: 1px solid rgba(79,255,176,.22); }
+    .msg.user  .av { background: rgba(0,212,255,.1);   color: var(--accent);   border: 1px solid rgba(0,212,255,.22); }
+    .msg.error .av { background: rgba(255,79,109,.1);  color: #ff4f6d;         border: 1px solid rgba(255,79,109,.22); }
+
+    .msg-body { display: flex; flex-direction: column; max-width: 72%; }
+    .msg.user .msg-body { align-items: flex-end; }
+
+    .bubble { padding: 12px 16px; border-radius: 12px; font-size: .9rem; line-height: 1.72; }
+    .msg.ai    .bubble { background: var(--ai-bg);   border: 1px solid rgba(79,255,176,.13); color: #d4f5e3; border-top-left-radius: 3px; }
+    .msg.user  .bubble { background: var(--user-bg); border: 1px solid rgba(0,212,255,.13);  color: #d4eaf5; border-top-right-radius: 3px; }
+    .msg.error .bubble { background: rgba(255,79,109,.07); border: 1px solid rgba(255,79,109,.22); color: #ffb0bc; }
+
+    .bubble code { font-family: 'Space Mono', monospace; background: rgba(255,255,255,.07);
+      padding: 1px 5px; border-radius: 4px; font-size: .82em; }
+    .bubble pre { background: rgba(0,0,0,.4); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 14px; margin: 10px 0; overflow-x: auto; }
+    .bubble pre code { background: none; padding: 0; font-size: .8em; }
+    .ts { font-family: 'Space Mono', monospace; font-size: .6rem; color: var(--muted); margin-top: 4px; padding: 0 2px; }
+
+    /* Typing */
+    .typing .bubble { display: flex; align-items: center; gap: 5px; padding: 14px 18px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ai-color);
+      opacity: .4; animation: bounce .9s ease-in-out infinite; }
+    .dot:nth-child(2) { animation-delay: .15s; }
+    .dot:nth-child(3) { animation-delay: .3s; }
+    @keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:.4} 40%{transform:translateY(-6px);opacity:1} }
+
+    /* INPUT */
+    .input-bar { flex-shrink: 0; padding: 14px 28px 22px;
+      border-top: 1px solid var(--border); background: rgba(8,12,16,.92); backdrop-filter: blur(12px); }
+    .input-row { display: flex; align-items: flex-end; gap: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 13px; padding: 10px 10px 10px 16px;
+      transition: border-color .2s, box-shadow .2s; }
+    .input-row:focus-within { border-color: rgba(0,212,255,.4); box-shadow: 0 0 0 3px rgba(0,212,255,.07); }
+    #userInput { flex: 1; background: transparent; border: none; outline: none; resize: none;
+      color: #fff; font-family: 'Syne', sans-serif; font-size: .92rem; line-height: 1.5;
+      max-height: 130px; min-height: 24px; }
+    #userInput::placeholder { color: var(--muted); }
+    #sendBtn { flex-shrink: 0; width: 40px; height: 40px; border-radius: 10px;
+      background: var(--accent); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .15s, box-shadow .2s; color: #000; }
+    #sendBtn:hover { background: #33dbff; box-shadow: 0 0 16px rgba(0,212,255,.5); }
+    #sendBtn:active { transform: scale(.9); }
+    #sendBtn:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; box-shadow: none; }
+    #sendBtn svg { width: 17px; height: 17px; }
+    .input-hint { font-family: 'Space Mono', monospace; font-size: .6rem; color: var(--muted);
+      margin-top: 7px; padding-left: 2px; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 14px; }
+      nav ul li a { padding: 5px 8px; font-size: .72rem; }
+      #chat, .chat-header, .input-bar, #setupBanner { padding-left: 16px; padding-right: 16px; }
+      .msg-body { max-width: 86%; }
+    }
+  </style>
+</head>
+<body>
+<div id="stars"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <span class="nav-logo-icon">◎</span> ORBITER
+  </a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="game.html">Game</a></li>
+    <li><a href="details.html">Information</a></li>
+    <li><a href="abs.html">About Us</a></li>
+    <li><a href="cb.html" class="active">Chatbox</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <div class="chat-header">
+    <div class="status-dot"></div>
+    <div class="chat-header-info">
+      <h2>ORBITER AI TERMINAL</h2>
+      <p>Gemini 2.0 Flash &nbsp;·&nbsp; Google AI &nbsp;·&nbsp; Free tier</p>
+    </div>
+    <div class="badge">● ONLINE</div>
+  </div>
+
+  <!-- One-time setup strip -->
+  <div id="setupBanner">
+    <p>
+      🔑 <strong>One-time setup —</strong> Get your <strong>free</strong> Gemini API key:
+      go to <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">aistudio.google.com</a>,
+      sign in with Google, click <strong>Get API Key</strong>. Paste it below — stored only in your browser.
+    </p>
+    <div class="key-row">
+      <input id="keyInput" type="password" placeholder="AIza…your key here" autocomplete="off" />
+      <button id="saveKeyBtn" onclick="saveKey()">Save &amp; Go</button>
+    </div>
+  </div>
+
+  <div id="chat">
+    <div class="welcome" id="welcomeCard">
+      <span class="w-icon">◎</span>
+      <h2>Welcome to Orbiter AI</h2>
+      <p>Your AI terminal is live. Ask me anything — space, science, code, strategy, or just a conversation.</p>
+      <div class="chips">
+        <button class="chip" onclick="sendSuggestion('How does orbital mechanics work?')">Orbital mechanics</button>
+        <button class="chip" onclick="sendSuggestion('What is the Fermi paradox?')">Fermi paradox</button>
+        <button class="chip" onclick="sendSuggestion('Help me write a Python script')">Python help</button>
+        <button class="chip" onclick="sendSuggestion('Tell me something wild about the universe')">Wild space facts</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <div class="input-row">
+      <textarea id="userInput" rows="1" placeholder="Ask Orbiter AI anything…" autocomplete="off"></textarea>
+      <button id="sendBtn" onclick="sendMessage()" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="input-hint">Enter to send &nbsp;·&nbsp; Shift+Enter for new line</div>
+  </div>
+
+</div>
+
+<script>
+  const GEMINI_MODEL = 'gemini-2.0-flash';
+  const history = []; // Gemini format: [{role:'user'|'model', parts:[{text}]}]
+
+  // ── Key stored in browser localStorage ──
+  let API_KEY = localStorage.getItem('orbiter_gemini_key') || '';
+  if (API_KEY) document.getElementById('setupBanner').style.display = 'none';
+
+  function saveKey() {
+    const v = document.getElementById('keyInput').value.trim();
+    if (!v) { alert('Please paste your Gemini API key first.'); return; }
+    API_KEY = v;
+    localStorage.setItem('orbiter_gemini_key', v);
+    document.getElementById('setupBanner').style.display = 'none';
+    document.getElementById('userInput').focus();
+  }
+
+  // Allow pressing Enter in key input to save
+  document.getElementById('keyInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') saveKey();
+  });
+
+  // ── Textarea auto-resize ──
+  const ta = document.getElementById('userInput');
+  ta.addEventListener('input', () => {
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 130) + 'px';
+  });
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  function now() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function formatText(raw) {
+    return raw
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, _l, code) => `<pre><code>${code.trim()}</code></pre>`)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  }
+
+  function appendMsg(role, text) {
+    const chat = document.getElementById('chat');
+    const wc   = document.getElementById('welcomeCard');
+    if (wc) wc.remove();
+
+    const wrap   = document.createElement('div'); wrap.className = `msg ${role}`;
+    const av     = document.createElement('div'); av.className = 'av';
+    av.textContent = role === 'user' ? 'YOU' : role === 'error' ? '!' : 'AI';
+    const body   = document.createElement('div'); body.className = 'msg-body';
+    if (role === 'user') body.style.alignItems = 'flex-end';
+    const bubble = document.createElement('div'); bubble.className = 'bubble';
+    bubble.innerHTML = formatText(text);
+    const ts     = document.createElement('div'); ts.className = 'ts';
+    ts.textContent = now();
+
+    body.appendChild(bubble); body.appendChild(ts);
+    wrap.appendChild(av);     wrap.appendChild(body);
+    chat.appendChild(wrap);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function showTyping() {
+    const chat = document.getElementById('chat');
+    const d = document.createElement('div');
+    d.className = 'msg ai typing'; d.id = 'typing';
+    d.innerHTML = `<div class="av">AI</div><div class="msg-body"><div class="bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+    chat.appendChild(d);
+    chat.scrollTop = chat.scrollHeight;
+  }
+  function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+  function setLoading(v) {
+    document.getElementById('sendBtn').disabled = v;
+    ta.disabled = v;
+  }
+
+  async function sendMessage() {
+    const text = ta.value.trim();
+    if (!text) return;
+
+    // No key yet — show setup strip
+    if (!API_KEY) {
+      document.getElementById('setupBanner').style.display = 'flex';
+      document.getElementById('keyInput').focus();
+      return;
+    }
+
+    ta.value = ''; ta.style.height = 'auto';
+    appendMsg('user', text);
+    history.push({ role: 'user', parts: [{ text }] });
+
+    setLoading(true);
+    showTyping();
+
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${API_KEY}`;
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: {
+            parts: [{
+              text: "You are Orbiter AI — a sharp, knowledgeable, and slightly cosmic assistant built into the Orbiter space arcade platform. Be concise, clear, and genuinely helpful. When discussing space topics you can show enthusiasm. Use markdown formatting where helpful."
+            }]
+          },
+          contents: history,
+          generationConfig: { maxOutputTokens: 1024, temperature: 0.85 }
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        // Bad key — reset so user can re-enter
+        if (res.status === 400 || res.status === 403) {
+          localStorage.removeItem('orbiter_gemini_key');
+          API_KEY = '';
+          document.getElementById('setupBanner').style.display = 'flex';
+        }
+        throw new Error(err?.error?.message || `HTTP ${res.status}`);
+      }
+
+      const data  = await res.json();
+      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || '(no response)';
+      history.push({ role: 'model', parts: [{ text: reply }] });
+
+      hideTyping();
+      appendMsg('ai', reply);
+
+    } catch (e) {
+      hideTyping();
+      appendMsg('error', `⚠ ${e.message}`);
+    } finally {
+      setLoading(false);
+      ta.focus();
+    }
+  }
+
+  function sendSuggestion(text) {
+    ta.value = text;
+    sendMessage();
+  }
+</script>
+</body>
+</html>
