@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ORBITER – Cosmic Knowledge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080c10; --surface: #0d1117; --border: #1e2a38;
+      --accent: #00d4ff; --accent2: #7b61ff; --text: #c9d6e3; --muted: #4a5a6a;
+      --ai-color: #4fffb0; --nav-h: 62px; --radius: 14px;
+    }
+    html, body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+
+    #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,.55) 0%,transparent 100%),
+        radial-gradient(1px 1px at 78% 8%,  rgba(255,255,255,.4) 0%,transparent 100%),
+        radial-gradient(1px 1px at 53% 60%, rgba(255,255,255,.5) 0%,transparent 100%),
+        radial-gradient(1px 1px at 8%  78%, rgba(255,255,255,.35) 0%,transparent 100%),
+        radial-gradient(1px 1px at 88% 52%, rgba(255,255,255,.45) 0%,transparent 100%),
+        radial-gradient(1.5px 1.5px at 33% 88%, rgba(255,255,255,.3) 0%,transparent 100%),
+        radial-gradient(1px 1px at 68% 38%, rgba(255,255,255,.6) 0%,transparent 100%),
+        radial-gradient(2px 2px at 4% 48%, rgba(0,212,255,.25) 0%,transparent 100%); }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
+      background: rgba(8,12,16,.88); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 1.05rem;
+      letter-spacing: .15em; color: var(--accent); text-decoration: none;
+      display: flex; align-items: center; gap: 10px; }
+    .nav-logo-icon { font-size: 1.3rem; animation: pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;text-shadow:0 0 10px var(--accent)} 50%{opacity:.5;text-shadow:none} }
+    nav ul { list-style: none; display: flex; gap: 4px; }
+    nav ul li a { display: block; padding: 6px 14px; border-radius: 8px; font-size: .82rem;
+      font-weight: 600; letter-spacing: .04em; color: var(--muted); text-decoration: none;
+      transition: color .2s, background .2s; }
+    nav ul li a:hover, nav ul li a.active { color: var(--accent); background: rgba(0,212,255,.08); }
+
+    /* PAGE */
+    .page { position: relative; z-index: 1; padding-top: var(--nav-h); }
+
+    .page-header { padding: 48px 32px 36px; border-bottom: 1px solid var(--border); max-width: 860px; margin: 0 auto; }
+    .page-header .tag { font-family: 'Space Mono', monospace; font-size: .7rem; letter-spacing: .14em;
+      color: var(--accent); background: rgba(0,212,255,.08); border: 1px solid rgba(0,212,255,.2);
+      padding: 5px 14px; border-radius: 20px; display: inline-block; margin-bottom: 16px; }
+    .page-header h1 { font-size: 2rem; font-weight: 800; color: #fff; letter-spacing: .02em; }
+    .page-header p  { font-size: .95rem; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+
+    .content { max-width: 860px; margin: 0 auto; padding: 48px 32px 80px; }
+
+    /* SECTION */
+    .section { margin-bottom: 60px; }
+    .section-title {
+      font-size: .68rem; font-family: 'Space Mono', monospace; font-weight: 700;
+      letter-spacing: .2em; color: var(--accent); text-transform: uppercase;
+      margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px 22px;
+      transition: border-color .25s, transform .2s, box-shadow .25s;
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      opacity: 0; transition: opacity .25s;
+    }
+    .card:hover { border-color: rgba(0,212,255,.25); transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4); }
+    .card:hover::before { opacity: 1; }
+    .card-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+    .card h3 { font-size: .95rem; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: .02em; }
+    .card .stat { font-family: 'Space Mono', monospace; font-size: .72rem; color: var(--accent);
+      margin-bottom: 10px; letter-spacing: .04em; }
+    .card p  { font-size: .83rem; color: var(--muted); line-height: 1.7; }
+    .card .fact { font-size: .78rem; color: var(--ai-color); margin-top: 10px;
+      padding: 8px 12px; background: rgba(79,255,176,.05); border-radius: 8px;
+      border-left: 2px solid rgba(79,255,176,.3); font-style: italic; }
+
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border);
+      padding: 20px 32px; text-align: center;
+      font-family: 'Space Mono', monospace; font-size: .68rem; color: var(--muted); letter-spacing: .05em; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 16px; }
+      nav ul li a { padding: 5px 9px; font-size: .75rem; }
+      .page-header, .content { padding-left: 16px; padding-right: 16px; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="stars"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <span class="nav-logo-icon">◎</span> ORBITER
+  </a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="game.html">Game</a></li>
+    <li><a href="details.html" class="active">Information</a></li>
+    <li><a href="abs.html">About Us</a></li>
+    <li><a href="cb.html">Chatbox</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <span class="tag">COSMIC KNOWLEDGE DATABASE</span>
+    <h1>Deep-Space Archive</h1>
+    <p>For explorers, nerds, and future astronauts. Everything you need to know before leaving Earth.</p>
+  </div>
+
+  <div class="content">
+
+    <div class="section">
+      <div class="section-title">The Universe</div>
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🌌</span>
+          <h3>Observable Universe</h3>
+          <div class="stat">Diameter: 93 billion light-years &nbsp;·&nbsp; Age: 13.8 Gyr</div>
+          <p>The universe is expanding — and at the very edges, expansion is faster than light itself.</p>
+          <p class="fact">Nothing moves through space faster than light, but space itself has no speed limit.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🧊</span>
+          <h3>Cosmic Microwave Background</h3>
+          <div class="stat">Age of snapshot: 380,000 years post–Big Bang</div>
+          <p>The oldest light in existence. Tiny temperature ripples in the CMB seeded the galaxies we see today.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🌀</span>
+          <h3>Black Holes</h3>
+          <div class="stat">Escape velocity: &gt; c (speed of light)</div>
+          <p>Gravity so intense that not even light escapes. Formed from collapsed stars or galactic cores.</p>
+          <p class="fact">Time slows near a black hole. Distant observers see you freeze at the event horizon.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">⚡</span>
+          <h3>Dark Energy</h3>
+          <div class="stat">68% of total universe energy content</div>
+          <p>A mysterious force accelerating cosmic expansion. We can measure it, but we have no idea what it actually is.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Stars &amp; Galaxies</div>
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🌠</span>
+          <h3>Neutron Stars</h3>
+          <div class="stat">Rotation: up to 700 Hz &nbsp;·&nbsp; Diameter: ~20 km</div>
+          <p>Ultra-dense stellar remnants. Some spin hundreds of times per second — pulsars you can set your clock to.</p>
+          <p class="fact">A teaspoon of neutron star material weighs ~4 billion tons.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🌟</span>
+          <h3>Supernovae</h3>
+          <div class="stat">Peak luminosity: ~10 billion Suns</div>
+          <p>Explosive deaths of massive stars, briefly outshining entire galaxies. Every atom of gold on Earth was forged in one.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🪐</span>
+          <h3>Exoplanets</h3>
+          <div class="stat">Confirmed: 5,500+ &nbsp;·&nbsp; and counting</div>
+          <p>Worlds beyond our solar system in all shapes — some orbit two suns, some rain molten glass sideways at 5,000 mph.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🌌</span>
+          <h3>Milky Way</h3>
+          <div class="stat">100–400 billion stars &nbsp;·&nbsp; Diameter: 100,000 ly</div>
+          <p>Our home galaxy — and it's on a slow-motion collision course with Andromeda in ~4.5 billion years.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Quantum Realm</div>
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🧪</span>
+          <h3>Quantum Vacuum</h3>
+          <p>Empty space is never truly empty. Quantum fields fluctuate constantly, producing virtual particles that pop in and out of existence.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">⚛️</span>
+          <h3>Wave-Particle Duality</h3>
+          <p>Light and matter behave as both particles and waves simultaneously. Observing a quantum system changes its behaviour.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔗</span>
+          <h3>Quantum Entanglement</h3>
+          <p>Two particles become linked across any distance. Measuring one instantly affects the other — what Einstein called "spooky action at a distance."</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Space Travel</div>
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🚀</span>
+          <h3>Rocket Propulsion</h3>
+          <p>Rockets expel mass backward to push forward. Space is a vacuum — rockets work without air, but produce no sound either.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🛰️</span>
+          <h3>Satellites &amp; ISS</h3>
+          <div class="stat">ISS speed: 17,500 mph — 5 miles per second</div>
+          <p>The ISS completes 16 orbits of Earth every day. Astronauts on board watch 16 sunrises and 16 sunsets daily.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🌑</span>
+          <h3>Moon Missions</h3>
+          <div class="stat">First landing: July 20, 1969</div>
+          <p>Apollo 11 changed history. Fun detail: Moon dust smells like burnt gunpowder when first brought into the lunar module.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>◎ ORBITER &nbsp;·&nbsp; Built by Advit &amp; Shaurya &nbsp;·&nbsp; 2026 DevPost Hackathon</footer>
+</div>
+</body>
+</html>
