@@ -100,7 +100,7 @@
   }
   .msg.user .msg-bubble { background: var(--user-bg); border: 1px solid var(--border-bright); }
   .msg.ai   .msg-bubble { background: var(--ai-bg);   border: 1px solid var(--border); }
-  .msg.ai.err .msg-bubble { border-color: rgba(248,113,113,0.3); color: var(--red); }
+  .msg.ai.err .msg-bubble { border-color: rgba(248,113,113,0.3); color: var(--red); font-size: 0.75rem; }
 
   .typing-dot {
     display: inline-block; width: 5px; height: 5px; border-radius: 50%;
@@ -208,7 +208,7 @@ HACKATHON: 2026 DevPost Hackathon. DevPost is a platform for hackathon project s
 
 TECH STACK: Vanilla HTML/CSS/JS. No React/Vue. AI uses Gemini API. Game uses a custom canvas engine Advit wrote. Google Fonts. GitHub Pages hosting.
 
-TONE RULES: No "Certainly!" or "Great question!". Say "yeah", "nah", "tbh", "kinda", "honestly" freely. Don't sound corporate. If you don't know something specific, say so. Keep it real.`;
+TONE RULES: No "Certainly!" or "Great question!". Say "yeah", "nah", "tbh", "kinda", "honestly" freely. Don't sound corporate. Keep it real.`;
 
 let history = [];
 let isLoading = false;
@@ -295,9 +295,11 @@ async function sendMessage() {
     removeTyping();
 
     if (data.error) {
-      appendMsg("ai", "something went wrong on the AI side — try again in a sec.", true);
+      // show the REAL error message so we know exactly what's wrong
+      appendMsg("ai", `API error ${data.error.code}: ${data.error.message}`, true);
       document.getElementById("statusDot").className = "dot error";
-      document.getElementById("statusText").textContent = "api error";
+      document.getElementById("statusText").textContent = "api error · check console";
+      console.error("Gemini error:", data.error);
       history.pop();
     } else {
       const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "hmm, no response — try again?";
@@ -306,7 +308,8 @@ async function sendMessage() {
     }
   } catch (err) {
     removeTyping();
-    appendMsg("ai", "network error — are you online?", true);
+    appendMsg("ai", `network error: ${err.message}`, true);
+    console.error("Fetch error:", err);
     history.pop();
   }
 
