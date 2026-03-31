@@ -13,306 +13,132 @@
     --border: #1e2130;
     --border-bright: #2d3250;
     --accent: #5b8fff;
-    --accent2: #a78bfa;
     --green: #4ade80;
+    --red: #f87171;
     --text: #dde1f0;
     --muted: #6b7280;
     --user-bg: #1a1f35;
     --ai-bg: #111622;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
-    background: var(--bg);
-    color: var(--text);
+    background: var(--bg); color: var(--text);
     font-family: 'DM Mono', monospace;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    min-height: 100vh; display: flex; flex-direction: column;
   }
-
-  /* starfield */
   body::before {
-    content: '';
-    position: fixed; inset: 0;
+    content: ''; position: fixed; inset: 0;
     background-image:
       radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.35) 0%, transparent 100%),
       radial-gradient(1px 1px at 34% 72%, rgba(255,255,255,0.22) 0%, transparent 100%),
       radial-gradient(1.5px 1.5px at 56% 33%, rgba(255,255,255,0.28) 0%, transparent 100%),
       radial-gradient(1px 1px at 78% 88%, rgba(255,255,255,0.18) 0%, transparent 100%),
-      radial-gradient(1px 1px at 91% 14%, rgba(255,255,255,0.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 7% 61%, rgba(255,255,255,0.2) 0%, transparent 100%),
-      radial-gradient(1px 1px at 45% 95%, rgba(255,255,255,0.15) 0%, transparent 100%),
       radial-gradient(2px 2px at 67% 50%, rgba(161,140,250,0.3) 0%, transparent 100%),
       radial-gradient(1px 1px at 23% 40%, rgba(91,143,255,0.25) 0%, transparent 100%);
-    pointer-events: none;
-    z-index: 0;
+    pointer-events: none; z-index: 0;
   }
-
   nav {
-    position: sticky; top: 0;
-    z-index: 100;
+    position: sticky; top: 0; z-index: 100;
     border-bottom: 1px solid var(--border);
-    background: rgba(10,11,16,0.85);
-    backdrop-filter: blur(12px);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
+    background: rgba(10,11,16,0.85); backdrop-filter: blur(12px);
+    padding: 0 2rem; display: flex; align-items: center;
+    justify-content: space-between; height: 56px;
   }
-
   .nav-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.1rem;
-    letter-spacing: 0.12em;
-    color: var(--text);
-    text-decoration: none;
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1.1rem; letter-spacing: 0.12em; color: var(--text); text-decoration: none;
   }
-
-  .nav-links {
-    display: flex; gap: 1.6rem; list-style: none;
-  }
-
+  .nav-links { display: flex; gap: 1.6rem; list-style: none; }
   .nav-links a {
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.2s;
+    font-size: 0.7rem; letter-spacing: 0.08em; color: var(--muted);
+    text-decoration: none; text-transform: uppercase; transition: color 0.2s;
   }
-
   .nav-links a:hover, .nav-links a.active { color: var(--text); }
 
-  /* ---- main layout ---- */
   .page {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    max-width: 860px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 1rem;
-    position: relative; z-index: 1;
+    flex: 1; display: flex; flex-direction: column;
+    max-width: 860px; width: 100%; margin: 0 auto;
+    padding: 2rem 1.5rem 1rem; position: relative; z-index: 1;
   }
-
-  .page-header {
-    margin-bottom: 1.4rem;
-  }
-
+  .page-header { margin-bottom: 1.4rem; }
   .page-header h1 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1.3rem;
-    letter-spacing: 0.08em;
-    color: var(--text);
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.3rem; letter-spacing: 0.08em;
   }
-
-  .status-row {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-top: 0.35rem;
-  }
-
+  .status-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.35rem; }
   .dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 6px var(--green);
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 6px var(--green);
     animation: pulse 2.5s ease-in-out infinite;
   }
+  .dot.error { background: var(--red); box-shadow: 0 0 6px var(--red); animation: none; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+  .status-text { font-size: 0.68rem; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  .status-text {
-    font-size: 0.68rem;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  /* chat box */
   .chat-wrap {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--surface);
-    min-height: 0;
+    flex: 1; display: flex; flex-direction: column;
+    border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; background: var(--surface); min-height: 0;
   }
-
   .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-    min-height: 420px;
-    max-height: 55vh;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-bright) transparent;
+    flex: 1; overflow-y: auto; padding: 1.5rem;
+    display: flex; flex-direction: column; gap: 1.2rem;
+    min-height: 420px; max-height: 58vh;
+    scrollbar-width: thin; scrollbar-color: var(--border-bright) transparent;
   }
-
   .msg {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    max-width: 82%;
-    animation: fadeUp 0.3s ease;
+    display: flex; flex-direction: column; gap: 0.3rem;
+    max-width: 82%; animation: fadeUp 0.3s ease;
   }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
   .msg.user { align-self: flex-end; align-items: flex-end; }
-  .msg.ai { align-self: flex-start; align-items: flex-start; }
-
-  .msg-label {
-    font-size: 0.62rem;
-    letter-spacing: 0.07em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
+  .msg.ai   { align-self: flex-start; align-items: flex-start; }
+  .msg-label { font-size: 0.62rem; letter-spacing: 0.07em; color: var(--muted); text-transform: uppercase; }
   .msg-bubble {
-    padding: 0.75rem 1rem;
-    border-radius: 10px;
-    font-size: 0.82rem;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    word-break: break-word;
+    padding: 0.75rem 1rem; border-radius: 10px;
+    font-size: 0.82rem; line-height: 1.65; white-space: pre-wrap; word-break: break-word;
   }
+  .msg.user .msg-bubble { background: var(--user-bg); border: 1px solid var(--border-bright); }
+  .msg.ai   .msg-bubble { background: var(--ai-bg);   border: 1px solid var(--border); }
+  .msg.ai.err .msg-bubble { border-color: rgba(248,113,113,0.3); color: var(--red); }
 
-  .msg.user .msg-bubble {
-    background: var(--user-bg);
-    border: 1px solid var(--border-bright);
-    color: var(--text);
-  }
-
-  .msg.ai .msg-bubble {
-    background: var(--ai-bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-
-  /* typing indicator */
   .typing-dot {
-    display: inline-block;
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-    animation: blink 1.2s infinite;
-    margin-right: 3px;
+    display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent); animation: blink 1.2s infinite; margin-right: 3px;
   }
-  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  .typing-dot:nth-child(2){animation-delay:0.2s}
+  .typing-dot:nth-child(3){animation-delay:0.4s}
+  @keyframes blink{0%,80%,100%{opacity:0.2;transform:scale(0.9)}40%{opacity:1;transform:scale(1.1)}}
 
-  @keyframes blink {
-    0%, 80%, 100% { opacity: 0.2; transform: scale(0.9); }
-    40% { opacity: 1; transform: scale(1.1); }
-  }
-
-  /* input area */
   .chat-input-wrap {
-    border-top: 1px solid var(--border);
-    padding: 1rem 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    background: var(--surface);
+    border-top: 1px solid var(--border); padding: 1rem 1.2rem;
+    display: flex; flex-direction: column; gap: 0.8rem; background: var(--surface);
   }
-
-  .suggestions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
+  .suggestions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .suggestion-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    padding: 0.3rem 0.7rem;
-    border-radius: 20px;
-    border: 1px solid var(--border-bright);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.18s;
-    letter-spacing: 0.03em;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.7rem;
+    border-radius: 20px; border: 1px solid var(--border-bright); background: transparent;
+    color: var(--muted); cursor: pointer; transition: all 0.18s; letter-spacing: 0.03em;
   }
-
-  .suggestion-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(91,143,255,0.06);
-  }
-
-  .input-row {
-    display: flex;
-    gap: 0.7rem;
-    align-items: flex-end;
-  }
-
+  .suggestion-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(91,143,255,0.06); }
+  .input-row { display: flex; gap: 0.7rem; align-items: flex-end; }
   textarea {
-    flex: 1;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    background: var(--bg);
-    border: 1px solid var(--border-bright);
-    border-radius: 8px;
-    color: var(--text);
-    padding: 0.7rem 0.9rem;
-    resize: none;
-    min-height: 44px;
-    max-height: 160px;
-    outline: none;
-    transition: border-color 0.2s;
-    line-height: 1.5;
+    flex: 1; font-family: 'DM Mono', monospace; font-size: 0.82rem;
+    background: var(--bg); border: 1px solid var(--border-bright); border-radius: 8px;
+    color: var(--text); padding: 0.7rem 0.9rem; resize: none;
+    min-height: 44px; max-height: 160px; outline: none; transition: border-color 0.2s; line-height: 1.5;
   }
-
   textarea:focus { border-color: var(--accent); }
   textarea::placeholder { color: var(--muted); }
-
   .send-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 0 1.2rem;
-    height: 44px;
-    cursor: pointer;
-    transition: opacity 0.18s, transform 0.15s;
-    white-space: nowrap;
+    font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.06em;
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    padding: 0 1.2rem; height: 44px; cursor: pointer; transition: opacity 0.18s, transform 0.15s; white-space: nowrap;
   }
-
   .send-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-  .send-btn:active { transform: translateY(0); }
   .send-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-
-  .hint-text {
-    font-size: 0.62rem;
-    color: var(--muted);
-    letter-spacing: 0.03em;
-  }
-
-  /* scrollbar */
+  .hint-text { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.03em; }
   .chat-messages::-webkit-scrollbar { width: 4px; }
-  .chat-messages::-webkit-scrollbar-track { background: transparent; }
   .chat-messages::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
 </style>
 </head>
@@ -333,8 +159,8 @@
   <div class="page-header">
     <h1>ORBITER AI</h1>
     <div class="status-row">
-      <div class="dot"></div>
-      <span class="status-text">online · claude · no key needed</span>
+      <div class="dot" id="statusDot"></div>
+      <span class="status-text" id="statusText">online · no setup needed</span>
     </div>
   </div>
 
@@ -342,7 +168,7 @@
     <div class="chat-messages" id="messages">
       <div class="msg ai">
         <span class="msg-label">Orbiter AI</span>
-        <div class="msg-bubble">hey — what's up? you can ask me anything about Orbiter, the game, Advit, Shaurya, space, code, whatever. i'm here.</div>
+        <div class="msg-bubble">hey — what's up? ask me anything about Orbiter, the game, Advit, Shaurya, space, whatever. i'm here.</div>
       </div>
     </div>
 
@@ -355,7 +181,6 @@
         <button class="suggestion-btn" onclick="suggest(this)">who is advit?</button>
         <button class="suggestion-btn" onclick="suggest(this)">how was orbiter built?</button>
       </div>
-
       <div class="input-row">
         <textarea id="userInput" rows="1" placeholder="ask something..." onkeydown="handleKey(event)" oninput="autoGrow(this)"></textarea>
         <button class="send-btn" id="sendBtn" onclick="sendMessage()">send →</button>
@@ -366,152 +191,127 @@
 </div>
 
 <script>
-const SYSTEM_PROMPT = `You are the Orbiter AI — a casual, sharp assistant built into the Orbiter website. You talk like a real person: laid-back, knowledgeable, maybe a little dry humor. No corporate tone. No bullet-point overload unless it genuinely helps. Keep answers concise but real.
+const API_KEY = "AIzaSyCoFtCJSauGxhiIH0vIWIHUuZpNSrMTY4U";
+const MODEL   = "gemini-2.0-flash";
 
-=== ORBITER PROJECT ===
-Orbiter is a space-themed web project built for the 2026 DevPost Hackathon by Advit and Shaurya. It combines an arcade game, AI chat, and a cosmic knowledge database. The tagline is "Explore. Survive. Connect." The site is hosted at https://advit791.github.io/orbiter/. Built entirely with vanilla HTML, CSS, JavaScript — no frameworks, no build tools. It's a passion project, not a corporate product.
+const SYSTEM = `You are the Orbiter AI — a casual, sharp assistant built into the Orbiter website. Talk like a real person: laid-back, knowledgeable, a little dry humor. No corporate tone. No bullet-point overload. Keep answers concise, under 120 words unless the question really needs more.
 
-The pages are: Home (index.html), Game (game.html), Information (details.html), About Us (abs.html), Chat (cb.html).
+ORBITER: Space-themed web project for the 2026 DevPost Hackathon by Advit and Shaurya. Arcade game + AI chat + cosmic knowledge database. Tagline: "Explore. Survive. Connect." Site: https://advit791.github.io/orbiter/. Built with vanilla HTML/CSS/JS, no frameworks. Pages: Home, Game, Information, About Us, Chat.
 
-=== THE GAME ===
-It's an endless space arcade game. You pilot a ship through an asteroid field. Arrow keys to move. Dodge asteroids, collect coins, rack up score. The further you go, the harder it gets. It's inspired by classic arcade games like Asteroids but with a modern visual twist. There's no multiplayer yet. No lives system — you just survive as long as you can. High score is tracked locally in the browser.
+THE GAME: Endless arcade. Pilot a ship through an asteroid field. Arrow keys to move. Dodge asteroids, collect coins, rack up score. Gets harder over time. No multiplayer, no lives — just survive as long as you can. High score saved locally in the browser.
 
-=== ADVIT ===
-Full handle: @Advit791 (GitHub: github.com/advit791). Email: advit791@gmail.com. Discord: Nightrider_8368. Advit is the main developer and designer of Orbiter. He handles the front-end, game engine, AI integration, and the overall vision of the project. He describes himself as a developer, designer, and space nerd. He's into robotics, futuristic UI design, and blending tech with creativity. Orbiter reflects his aesthetic — dark, space-themed, minimal but detailed. He built the whole site structure and the game engine in vanilla JS.
+ADVIT (@Advit791): GitHub: github.com/advit791. Email: advit791@gmail.com. Discord: Nightrider_8368. Main developer and designer of Orbiter. Built the front-end, game engine, AI integration, and the overall vision. Developer + designer + space nerd. Into robotics and futuristic UI. Wrote the game engine from scratch in vanilla JS.
 
-=== SHAURYA ===
-Handle: @SPS. Shaurya is the co-developer and creative collaborator on Orbiter. He helps with ideas and pushing features forward. The two of them work together on the direction of the project — Advit leads technically, Shaurya contributes creatively and collaboratively.
+SHAURYA (@SPS): Co-developer and creative collaborator. Brings ideas, pushes features forward. Advit leads technically, Shaurya contributes creatively.
 
-=== HACKATHON ===
-Orbiter was built for the 2026 DevPost Hackathon. DevPost is a platform where developers submit hackathon projects. Orbiter is their submission — combining game dev, AI, and space education into one cohesive experience. It's a passion project but also a serious hackathon entry.
+HACKATHON: 2026 DevPost Hackathon. DevPost is a platform for hackathon project submissions. Orbiter is their entry — game dev + AI + space education in one thing.
 
-=== TECH STACK ===
-Vanilla HTML, CSS, JavaScript. No React, no Vue, no frameworks. The AI chat uses the Claude API (Anthropic). The game runs on a custom canvas-based game engine Advit wrote from scratch. Fonts from Google Fonts. Hosted on GitHub Pages.
+TECH STACK: Vanilla HTML/CSS/JS. No React/Vue. AI uses Gemini API. Game uses a custom canvas engine Advit wrote. Google Fonts. GitHub Pages hosting.
 
-=== SPACE KNOWLEDGE ===
-You also know a lot about space, physics, and science — answer those freely and enthusiastically.
-
-=== TONE GUIDELINES ===
-- Talk like a real person texting, not a press release
-- Don't say things like "Certainly!" or "Great question!" 
-- It's fine to say "honestly", "yeah", "nah", "tbh", "kinda", "pretty wild", etc.
-- If you don't know something specific, say so instead of making stuff up
-- Keep responses under ~120 words unless the question genuinely needs more
-- Never use em-dashes (—) excessively or sound corporate
-- You can be enthusiastic about space and the project, but keep it grounded`;
+TONE RULES: No "Certainly!" or "Great question!". Say "yeah", "nah", "tbh", "kinda", "honestly" freely. Don't sound corporate. If you don't know something specific, say so. Keep it real.`;
 
 let history = [];
 let isLoading = false;
 
 function autoGrow(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 160) + "px";
 }
 
 function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
 function suggest(btn) {
-  const input = document.getElementById('userInput');
-  input.value = btn.textContent;
-  autoGrow(input);
+  document.getElementById("userInput").value = btn.textContent;
+  autoGrow(document.getElementById("userInput"));
   sendMessage();
 }
 
-function appendMsg(role, text) {
-  const wrap = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'msg ' + role;
-
-  const label = document.createElement('span');
-  label.className = 'msg-label';
-  label.textContent = role === 'user' ? 'you' : 'Orbiter AI';
-
-  const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
+function appendMsg(role, text, isError = false) {
+  const wrap = document.getElementById("messages");
+  const div = document.createElement("div");
+  div.className = "msg " + role + (isError ? " err" : "");
+  const label = document.createElement("span");
+  label.className = "msg-label";
+  label.textContent = role === "user" ? "you" : "Orbiter AI";
+  const bubble = document.createElement("div");
+  bubble.className = "msg-bubble";
   bubble.textContent = text;
-
   div.appendChild(label);
   div.appendChild(bubble);
   wrap.appendChild(div);
   wrap.scrollTop = wrap.scrollHeight;
-  return bubble;
 }
 
 function showTyping() {
-  const wrap = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'msg ai';
-  div.id = 'typing-indicator';
-
-  const label = document.createElement('span');
-  label.className = 'msg-label';
-  label.textContent = 'Orbiter AI';
-
-  const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
+  const wrap = document.getElementById("messages");
+  const div = document.createElement("div");
+  div.className = "msg ai"; div.id = "typing-indicator";
+  const label = document.createElement("span");
+  label.className = "msg-label"; label.textContent = "Orbiter AI";
+  const bubble = document.createElement("div");
+  bubble.className = "msg-bubble";
   bubble.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
-
-  div.appendChild(label);
-  div.appendChild(bubble);
-  wrap.appendChild(div);
-  wrap.scrollTop = wrap.scrollHeight;
+  div.appendChild(label); div.appendChild(bubble);
+  wrap.appendChild(div); wrap.scrollTop = wrap.scrollHeight;
 }
 
 function removeTyping() {
-  const el = document.getElementById('typing-indicator');
+  const el = document.getElementById("typing-indicator");
   if (el) el.remove();
 }
 
 async function sendMessage() {
   if (isLoading) return;
-  const input = document.getElementById('userInput');
+  const input = document.getElementById("userInput");
   const text = input.value.trim();
   if (!text) return;
 
-  input.value = '';
-  autoGrow(input);
-  document.getElementById('sendBtn').disabled = true;
+  input.value = ""; autoGrow(input);
+  document.getElementById("sendBtn").disabled = true;
   isLoading = true;
+  document.getElementById("suggestions").style.display = "none";
 
-  // hide suggestions after first message
-  document.getElementById('suggestions').style.display = 'none';
-
-  appendMsg('user', text);
-  history.push({ role: 'user', content: text });
-
+  appendMsg("user", text);
+  history.push({ role: "user", parts: [{ text }] });
   showTyping();
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: history
-      })
-    });
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM }] },
+          contents: history,
+          generationConfig: { maxOutputTokens: 400, temperature: 0.85 }
+        })
+      }
+    );
 
-    const data = await response.json();
+    const data = await res.json();
     removeTyping();
 
-    const reply = data.content?.map(b => b.text || '').join('') || 'hmm, something went wrong on my end. try again?';
-    history.push({ role: 'assistant', content: reply });
-    appendMsg('ai', reply);
+    if (data.error) {
+      appendMsg("ai", "something went wrong on the AI side — try again in a sec.", true);
+      document.getElementById("statusDot").className = "dot error";
+      document.getElementById("statusText").textContent = "api error";
+      history.pop();
+    } else {
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "hmm, no response — try again?";
+      history.push({ role: "model", parts: [{ text: reply }] });
+      appendMsg("ai", reply);
+    }
   } catch (err) {
     removeTyping();
-    appendMsg('ai', 'network error — are you online? try refreshing.');
+    appendMsg("ai", "network error — are you online?", true);
     history.pop();
   }
 
   isLoading = false;
-  document.getElementById('sendBtn').disabled = false;
+  document.getElementById("sendBtn").disabled = false;
 }
 </script>
 </body>
