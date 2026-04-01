@@ -8,24 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg: #0a0b10;
-    --surface: #111219;
-    --border: #1e2130;
-    --border-bright: #2d3250;
-    --accent: #5b8fff;
-    --green: #4ade80;
-    --red: #f87171;
-    --text: #dde1f0;
-    --muted: #6b7280;
-    --user-bg: #1a1f35;
-    --ai-bg: #111622;
+    --bg: #0a0b10; --surface: #111219; --border: #1e2130;
+    --border-bright: #2d3250; --accent: #5b8fff; --green: #4ade80;
+    --text: #dde1f0; --muted: #6b7280; --user-bg: #1a1f35; --ai-bg: #111622;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg); color: var(--text);
-    font-family: 'DM Mono', monospace;
-    min-height: 100vh; display: flex; flex-direction: column;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; display: flex; flex-direction: column; }
   body::before {
     content: ''; position: fixed; inset: 0;
     background-image:
@@ -39,104 +27,44 @@
   }
   nav {
     position: sticky; top: 0; z-index: 100;
-    border-bottom: 1px solid var(--border);
-    background: rgba(10,11,16,0.85); backdrop-filter: blur(12px);
-    padding: 0 2rem; display: flex; align-items: center;
-    justify-content: space-between; height: 56px;
+    border-bottom: 1px solid var(--border); background: rgba(10,11,16,0.85);
+    backdrop-filter: blur(12px); padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between; height: 56px;
   }
-  .nav-logo {
-    font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: 1.1rem; letter-spacing: 0.12em; color: var(--text); text-decoration: none;
-  }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--text); text-decoration: none; }
   .nav-links { display: flex; gap: 1.6rem; list-style: none; }
-  .nav-links a {
-    font-size: 0.7rem; letter-spacing: 0.08em; color: var(--muted);
-    text-decoration: none; text-transform: uppercase; transition: color 0.2s;
-  }
+  .nav-links a { font-size: 0.7rem; letter-spacing: 0.08em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
   .nav-links a:hover, .nav-links a.active { color: var(--text); }
-
-  .page {
-    flex: 1; display: flex; flex-direction: column;
-    max-width: 860px; width: 100%; margin: 0 auto;
-    padding: 2rem 1.5rem 1rem; position: relative; z-index: 1;
-  }
+  .page { flex: 1; display: flex; flex-direction: column; max-width: 860px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem 1rem; position: relative; z-index: 1; }
   .page-header { margin-bottom: 1.4rem; }
-  .page-header h1 {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 1.3rem; letter-spacing: 0.08em;
-  }
+  .page-header h1 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.08em; }
   .status-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.35rem; }
-  .dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--green); box-shadow: 0 0 6px var(--green);
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-  .dot.error { background: var(--red); box-shadow: 0 0 6px var(--red); animation: none; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2.5s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
   .status-text { font-size: 0.68rem; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
-
-  .chat-wrap {
-    flex: 1; display: flex; flex-direction: column;
-    border: 1px solid var(--border); border-radius: 12px;
-    overflow: hidden; background: var(--surface); min-height: 0;
-  }
-  .chat-messages {
-    flex: 1; overflow-y: auto; padding: 1.5rem;
-    display: flex; flex-direction: column; gap: 1.2rem;
-    min-height: 420px; max-height: 58vh;
-    scrollbar-width: thin; scrollbar-color: var(--border-bright) transparent;
-  }
-  .msg {
-    display: flex; flex-direction: column; gap: 0.3rem;
-    max-width: 82%; animation: fadeUp 0.3s ease;
-  }
+  .chat-wrap { flex: 1; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.2rem; min-height: 420px; max-height: 58vh; scrollbar-width: thin; scrollbar-color: var(--border-bright) transparent; }
+  .msg { display: flex; flex-direction: column; gap: 0.3rem; max-width: 82%; animation: fadeUp 0.3s ease; }
   @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
   .msg.user { align-self: flex-end; align-items: flex-end; }
-  .msg.ai   { align-self: flex-start; align-items: flex-start; }
+  .msg.ai { align-self: flex-start; align-items: flex-start; }
   .msg-label { font-size: 0.62rem; letter-spacing: 0.07em; color: var(--muted); text-transform: uppercase; }
-  .msg-bubble {
-    padding: 0.75rem 1rem; border-radius: 10px;
-    font-size: 0.82rem; line-height: 1.65; white-space: pre-wrap; word-break: break-word;
-  }
+  .msg-bubble { padding: 0.75rem 1rem; border-radius: 10px; font-size: 0.82rem; line-height: 1.65; white-space: pre-wrap; word-break: break-word; }
   .msg.user .msg-bubble { background: var(--user-bg); border: 1px solid var(--border-bright); }
-  .msg.ai   .msg-bubble { background: var(--ai-bg);   border: 1px solid var(--border); }
-  .msg.ai.err .msg-bubble { border-color: rgba(248,113,113,0.3); color: var(--red); font-size: 0.75rem; }
-
-  .typing-dot {
-    display: inline-block; width: 5px; height: 5px; border-radius: 50%;
-    background: var(--accent); animation: blink 1.2s infinite; margin-right: 3px;
-  }
-  .typing-dot:nth-child(2){animation-delay:0.2s}
-  .typing-dot:nth-child(3){animation-delay:0.4s}
+  .msg.ai .msg-bubble { background: var(--ai-bg); border: 1px solid var(--border); }
+  .typing-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: blink 1.2s infinite; margin-right: 3px; }
+  .typing-dot:nth-child(2){animation-delay:0.2s} .typing-dot:nth-child(3){animation-delay:0.4s}
   @keyframes blink{0%,80%,100%{opacity:0.2;transform:scale(0.9)}40%{opacity:1;transform:scale(1.1)}}
-
-  .chat-input-wrap {
-    border-top: 1px solid var(--border); padding: 1rem 1.2rem;
-    display: flex; flex-direction: column; gap: 0.8rem; background: var(--surface);
-  }
+  .chat-input-wrap { border-top: 1px solid var(--border); padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; background: var(--surface); }
   .suggestions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .suggestion-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.7rem;
-    border-radius: 20px; border: 1px solid var(--border-bright); background: transparent;
-    color: var(--muted); cursor: pointer; transition: all 0.18s; letter-spacing: 0.03em;
-  }
+  .suggestion-btn { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.7rem; border-radius: 20px; border: 1px solid var(--border-bright); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.18s; letter-spacing: 0.03em; }
   .suggestion-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(91,143,255,0.06); }
   .input-row { display: flex; gap: 0.7rem; align-items: flex-end; }
-  textarea {
-    flex: 1; font-family: 'DM Mono', monospace; font-size: 0.82rem;
-    background: var(--bg); border: 1px solid var(--border-bright); border-radius: 8px;
-    color: var(--text); padding: 0.7rem 0.9rem; resize: none;
-    min-height: 44px; max-height: 160px; outline: none; transition: border-color 0.2s; line-height: 1.5;
-  }
+  textarea { flex: 1; font-family: 'DM Mono', monospace; font-size: 0.82rem; background: var(--bg); border: 1px solid var(--border-bright); border-radius: 8px; color: var(--text); padding: 0.7rem 0.9rem; resize: none; min-height: 44px; max-height: 160px; outline: none; transition: border-color 0.2s; line-height: 1.5; }
   textarea:focus { border-color: var(--accent); }
   textarea::placeholder { color: var(--muted); }
-  .send-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.06em;
-    background: var(--accent); color: #fff; border: none; border-radius: 8px;
-    padding: 0 1.2rem; height: 44px; cursor: pointer; transition: opacity 0.18s, transform 0.15s; white-space: nowrap;
-  }
+  .send-btn { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.06em; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 0 1.2rem; height: 44px; cursor: pointer; transition: opacity 0.18s, transform 0.15s; white-space: nowrap; }
   .send-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-  .send-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
   .hint-text { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.03em; }
   .chat-messages::-webkit-scrollbar { width: 4px; }
   .chat-messages::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
@@ -159,8 +87,8 @@
   <div class="page-header">
     <h1>ORBITER AI</h1>
     <div class="status-row">
-      <div class="dot" id="statusDot"></div>
-      <span class="status-text" id="statusText">online · no setup needed</span>
+      <div class="dot"></div>
+      <span class="status-text">online · instant · no setup</span>
     </div>
   </div>
 
@@ -168,10 +96,9 @@
     <div class="chat-messages" id="messages">
       <div class="msg ai">
         <span class="msg-label">Orbiter AI</span>
-        <div class="msg-bubble">hey — what's up? ask me anything about Orbiter, the game, Advit, Shaurya, space, whatever. i'm here.</div>
+        <div class="msg-bubble">hey — what's up? ask me anything about Orbiter, the game, Advit, Shaurya, space facts, whatever. i'm here.</div>
       </div>
     </div>
-
     <div class="chat-input-wrap">
       <div class="suggestions" id="suggestions">
         <button class="suggestion-btn" onclick="suggest(this)">who made orbiter?</button>
@@ -183,7 +110,7 @@
       </div>
       <div class="input-row">
         <textarea id="userInput" rows="1" placeholder="ask something..." onkeydown="handleKey(event)" oninput="autoGrow(this)"></textarea>
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()">send →</button>
+        <button class="send-btn" onclick="sendMessage()">send →</button>
       </div>
       <span class="hint-text">enter to send · shift+enter for new line</span>
     </div>
@@ -191,28 +118,389 @@
 </div>
 
 <script>
-const API_KEY = "AIzaSyBC7lhKCxPsMF96TI6RmYYcmJIa3p1jPo8";
-const MODEL   = "gemini-2.0-flash";
+// ─── KNOWLEDGE BASE ────────────────────────────────────────────────────────────
+const KB = [
 
-const SYSTEM = `You are the Orbiter AI — a casual, sharp assistant built into the Orbiter website. Talk like a real person: laid-back, knowledgeable, a little dry humor. No corporate tone. No bullet-point overload. Keep answers concise, under 120 words unless the question really needs more.
+  // ── GREETINGS ──────────────────────────────────────────────────────────────
+  { tags: ["hi","hello","hey","sup","what's up","whats up","yo","hiya","howdy","greetings","good morning","good evening","good afternoon"],
+    replies: [
+      "hey! what do you want to know? i can talk about orbiter, the game, the founders, or just throw space facts at you.",
+      "yo! ask me anything — orbiter, advit, shaurya, space, whatever.",
+      "hey hey. what's on your mind?",
+      "hi! i know a lot about orbiter and space. what's up?"
+    ]
+  },
 
-ORBITER: Space-themed web project for the 2026 DevPost Hackathon by Advit and Shaurya. Arcade game + AI chat + cosmic knowledge database. Tagline: "Explore. Survive. Connect." Site: https://advit791.github.io/orbiter/. Built with vanilla HTML/CSS/JS, no frameworks. Pages: Home, Game, Information, About Us, Chat.
+  // ── ORBITER GENERAL ───────────────────────────────────────────────────────
+  { tags: ["what is orbiter","about orbiter","what's orbiter","tell me about orbiter","explain orbiter","orbiter project","orbiter website","what does orbiter do","describe orbiter"],
+    replies: [
+      "Orbiter is a space-themed web project built for the 2026 DevPost Hackathon by Advit and Shaurya. it's got three things: an arcade game where you dodge asteroids, an AI chat (that's me), and a cosmic knowledge database. tagline is 'Explore. Survive. Connect.'",
+      "Orbiter = arcade game + AI chat + space knowledge base, all in one site. built by two guys for a hackathon. the whole thing runs on vanilla HTML, CSS, and JS — no frameworks, no shortcuts.",
+      "it's a space arcade experience. you fly a ship, dodge asteroids, and the site also has an AI and a deep dive into space topics. built by Advit and Shaurya for the 2026 DevPost Hackathon."
+    ]
+  },
 
-THE GAME: Endless arcade. Pilot a ship through an asteroid field. Arrow keys to move. Dodge asteroids, collect coins, rack up score. Gets harder over time. No multiplayer, no lives — just survive as long as you can. High score saved locally in the browser.
+  { tags: ["tagline","slogan","motto","explore survive connect"],
+    replies: [
+      "the tagline is 'Explore. Survive. Connect.' — pretty much sums up what you do on the site: explore the cosmos, survive the asteroid field, connect through the AI.",
+    ]
+  },
 
-ADVIT (@Advit791): GitHub: github.com/advit791. Email: advit791@gmail.com. Discord: Nightrider_8368. Main developer and designer of Orbiter. Built the front-end, game engine, AI integration, and the overall vision. Developer + designer + space nerd. Into robotics and futuristic UI. Wrote the game engine from scratch in vanilla JS.
+  { tags: ["when was orbiter made","when was it built","when did you start","orbiter release","orbiter date","year orbiter"],
+    replies: [
+      "Orbiter was built for the 2026 DevPost Hackathon. so yeah, 2026 — pretty fresh.",
+    ]
+  },
 
-SHAURYA (@SPS): Co-developer and creative collaborator. Brings ideas, pushes features forward. Advit leads technically, Shaurya contributes creatively.
+  { tags: ["where is orbiter","orbiter url","orbiter link","orbiter site","website link","find orbiter"],
+    replies: [
+      "you're already here! but the full URL is https://advit791.github.io/orbiter/ — hosted on GitHub Pages.",
+    ]
+  },
 
-HACKATHON: 2026 DevPost Hackathon. DevPost is a platform for hackathon project submissions. Orbiter is their entry — game dev + AI + space education in one thing.
+  { tags: ["pages","what pages","sections","navigation","tabs","orbiter pages"],
+    replies: [
+      "the site has five pages: Home, Game, Information (the cosmic knowledge base), About Us, and this Chat page. that's it, clean and simple.",
+    ]
+  },
 
-TECH STACK: Vanilla HTML/CSS/JS. No React/Vue. AI uses Gemini API. Game uses a custom canvas engine Advit wrote. Google Fonts. GitHub Pages hosting.
+  // ── THE GAME ──────────────────────────────────────────────────────────────
+  { tags: ["how do i play","how to play","game controls","controls","arrow keys","how does the game work","gameplay","how do you play","playing the game","start the game"],
+    replies: [
+      "use your arrow keys to pilot the ship. dodge the asteroids, collect coins to rack up score. the longer you survive, the harder it gets. that's basically it — simple but it gets intense.",
+      "arrow keys to move your ship. avoid asteroids, grab coins. there's no lives system — you just survive as long as you can. high score saves in your browser.",
+      "it's an endless arcade. arrow keys to dodge. the field gets more chaotic the deeper you go. try to beat your own high score."
+    ]
+  },
 
-TONE RULES: No "Certainly!" or "Great question!". Say "yeah", "nah", "tbh", "kinda", "honestly" freely. Don't sound corporate. Keep it real.`;
+  { tags: ["what is the game","tell me about the game","orbiter game","arcade game","space game","game description"],
+    replies: [
+      "it's an endless space arcade game. you pilot a ship through an asteroid field, dodge rocks, collect coins, and see how long you last. inspired by classic Asteroids but with a modern look.",
+      "endless arcade — you fly a ship, dodge asteroids, collect coins. no checkpoints, no lives, just pure survival. the further you go the faster things get."
+    ]
+  },
 
-let history = [];
-let isLoading = false;
+  { tags: ["high score","score","points","coin","coins","scoring"],
+    replies: [
+      "coins are how you rack up points. dodge the asteroids and grab every coin you can. your high score is saved locally in your browser so it sticks between sessions.",
+      "collect coins to score. the high score saves in your browser — so it's all yours, no account needed."
+    ]
+  },
 
+  { tags: ["multiplayer","two player","co-op","online play","play with friends"],
+    replies: [
+      "no multiplayer yet — it's solo survival for now. could be a cool future feature though.",
+    ]
+  },
+
+  { tags: ["lives","life system","how many lives","respawn","game over"],
+    replies: [
+      "no lives system. one hit and it's over. you just survive as long as you can and try to beat your score.",
+    ]
+  },
+
+  { tags: ["how hard","difficulty","easy","hard","gets harder","difficulty curve","asteroid speed"],
+    replies: [
+      "it starts manageable but gets noticeably harder the longer you survive. asteroid speed and density ramp up as your score climbs. no mercy.",
+    ]
+  },
+
+  { tags: ["tips","strategy","advice","how to get better","how to score high","trick","cheat"],
+    replies: [
+      "honestly? stay near the center so you have more room to dodge in any direction. don't chase every coin — surviving longer scores more than grabbing a coin and eating an asteroid. and learn the patterns early.",
+      "stay calm, stay central, don't be greedy with coins. easier said than done when it speeds up but that's the strat.",
+    ]
+  },
+
+  { tags: ["ship","spaceship","spacecraft","pilot","vessel"],
+    replies: [
+      "you pilot a spaceship through an endless asteroid field. arrow keys control it. it's simple — no weapons, no shields, just flying and dodging.",
+    ]
+  },
+
+  // ── ADVIT ─────────────────────────────────────────────────────────────────
+  { tags: ["who is advit","about advit","advit","tell me about advit","advit791","developer","main dev","who built","who coded","who made"],
+    replies: [
+      "Advit (@Advit791) is the main developer and designer of Orbiter. he handled the front-end, the game engine, AI integration, and the overall vision. into robotics, futuristic UI design, and space. built the whole game engine from scratch in vanilla JS.",
+      "Advit is the lead dev. he built the site structure, wrote the game engine himself, set up the AI chat, and designed the whole thing. his GitHub is github.com/advit791.",
+      "Advit: developer, designer, space nerd. built almost everything you see on this site. the kind of person who writes a canvas game engine from scratch because why not."
+    ]
+  },
+
+  { tags: ["advit github","advit791 github","github","source code","repo","repository","advit code"],
+    replies: [
+      "Advit's GitHub is github.com/advit791 — that's where the source lives.",
+    ]
+  },
+
+  { tags: ["advit email","email advit","contact advit","reach advit","advit contact","advit791@gmail"],
+    replies: [
+      "you can email Advit at advit791@gmail.com.",
+    ]
+  },
+
+  { tags: ["advit discord","discord","nightrider","nightrider_8368"],
+    replies: [
+      "Advit's Discord is Nightrider_8368. hit him up there if you want to chat.",
+    ]
+  },
+
+  { tags: ["advit hobbies","advit interests","what does advit like","advit robotics","advit design","advit passion"],
+    replies: [
+      "Advit is into robotics, futuristic UI design, and space. Orbiter is basically all three of those things smashed together into one project.",
+    ]
+  },
+
+  { tags: ["advit role","advit job","what did advit do","advit contribution","advit built","advit made"],
+    replies: [
+      "Advit handled the front-end, game engine, AI integration, and overall design vision. basically the whole technical and visual side of Orbiter.",
+    ]
+  },
+
+  // ── SHAURYA ───────────────────────────────────────────────────────────────
+  { tags: ["who is shaurya","shaurya","about shaurya","tell me about shaurya","sps","co-developer","co developer","cofounder","second founder"],
+    replies: [
+      "Shaurya (@SPS) is the co-developer and creative collaborator on Orbiter. he brings ideas, pushes features forward, and works with Advit on the direction of the project. Advit leads technically, Shaurya contributes creatively.",
+      "Shaurya is the co-dev — the creative side. he and Advit work together on Orbiter's direction, with Shaurya pushing ideas and features forward.",
+    ]
+  },
+
+  { tags: ["shaurya role","what did shaurya do","shaurya contribution","shaurya built","shaurya made"],
+    replies: [
+      "Shaurya is the creative collaborator — he brings ideas to life and helps push the features forward. Advit handles the technical heavy lifting, Shaurya keeps the creative direction solid.",
+    ]
+  },
+
+  // ── THE TEAM ──────────────────────────────────────────────────────────────
+  { tags: ["who made orbiter","who built orbiter","founders","team","creators","who created","who are the developers","how many people","who are they","the team"],
+    replies: [
+      "Orbiter was built by two people: Advit (@Advit791) and Shaurya (@SPS). Advit leads on the technical and design side, Shaurya is the creative collaborator.",
+      "two developers — Advit and Shaurya. Advit did the front-end, game engine, and AI. Shaurya is the co-developer and creative brain.",
+    ]
+  },
+
+  { tags: ["how long did it take","how long to build","build time","time to make","development time","how long orbiter"],
+    replies: [
+      "it was built for the 2026 DevPost Hackathon — so it came together under hackathon conditions. pretty impressive for a time-constrained build.",
+    ]
+  },
+
+  // ── HACKATHON ─────────────────────────────────────────────────────────────
+  { tags: ["hackathon","devpost","competition","what hackathon","2026 hackathon","devpost hackathon","contest","event"],
+    replies: [
+      "Orbiter was built for the 2026 DevPost Hackathon. DevPost is a platform where devs submit hackathon projects. Orbiter is their entry — a game, AI, and space education all in one.",
+      "it's their DevPost Hackathon 2026 submission. DevPost hosts hackathons where developers build projects under time pressure. Orbiter is Advit and Shaurya's entry.",
+    ]
+  },
+
+  { tags: ["did they win","did orbiter win","hackathon winner","results","prize","winning"],
+    replies: [
+      "the hackathon results aren't public yet — this thing is fresh. fingers crossed though, it's a solid project.",
+    ]
+  },
+
+  // ── TECH STACK ────────────────────────────────────────────────────────────
+  { tags: ["how was orbiter built","tech stack","technology","what language","what framework","how is it made","built with","tools used","vanilla js","html css","no framework"],
+    replies: [
+      "built with vanilla HTML, CSS, and JavaScript. no React, no Vue, no frameworks — just pure code. the game runs on a custom canvas engine Advit wrote from scratch. fonts from Google Fonts. hosted on GitHub Pages.",
+      "vanilla HTML/CSS/JS all the way. Advit wrote the game engine himself using the canvas API. no dependencies, no build tools. hosted free on GitHub Pages.",
+      "pure vanilla web stack. that means HTML, CSS, and JS — nothing else. the game engine is custom-built, which is honestly kind of impressive."
+    ]
+  },
+
+  { tags: ["github pages","hosting","deployed","where is it hosted","how is it hosted"],
+    replies: [
+      "hosted on GitHub Pages — free static hosting. the URL is advit791.github.io/orbiter/.",
+    ]
+  },
+
+  { tags: ["canvas","game engine","custom engine","how does the game run","canvas api"],
+    replies: [
+      "the game runs on a custom canvas-based game engine that Advit wrote from scratch in vanilla JS. no Unity, no Phaser, no game libraries — just raw canvas.",
+    ]
+  },
+
+  { tags: ["ai","how does the ai work","chat ai","ai tech","what ai","chatbot","how is the ai built"],
+    replies: [
+      "the AI chat (me!) is built right into the page — no external API calls, just a smart knowledge base about Orbiter, the founders, and space. instant responses, works offline, never breaks.",
+    ]
+  },
+
+  // ── INFORMATION PAGE ──────────────────────────────────────────────────────
+  { tags: ["information page","details page","cosmic knowledge","knowledge base","what's in information","space database","space info"],
+    replies: [
+      "the Information page is a deep dive into space topics — black holes, quantum physics, exoplanets, space travel, and more. it's like a mini encyclopedia for the cosmos.",
+      "the cosmic knowledge section covers black holes, exoplanets, quantum physics, space travel. real deep stuff, actually explained well.",
+    ]
+  },
+
+  // ── SPACE FACTS ───────────────────────────────────────────────────────────
+  { tags: ["space fact","tell me about space","space","astronomy","cosmos","universe","fun fact","random fact","something interesting","cool fact","space facts"],
+    replies: [
+      "a neutron star is so dense that a teaspoon of its material would weigh about a billion tons on Earth. and they spin hundreds of times per second. wild.",
+      "the observable universe is about 93 billion light-years across — but the universe itself is probably way bigger than that, we just can't see past where light has had time to reach us.",
+      "there are more stars in the universe than grains of sand on every beach on Earth. and most of them probably have planets.",
+      "if you fell into a black hole, to you it'd feel relatively normal at first — but to someone watching from outside, you'd appear to slow down and freeze at the event horizon forever. time dilation is not a joke.",
+      "the Voyager 1 probe, launched in 1977, is now over 23 billion kilometers from Earth and still sending data. it's the furthest human-made object ever.",
+      "on Venus, a day is longer than a year. it rotates so slowly that the sun rises in the west and sets in the east.",
+      "the Sun makes up 99.86% of the total mass of the solar system. everything else — all the planets, moons, asteroids — is the other 0.14%.",
+      "there's a giant cloud of alcohol in space (Sagittarius B2) — if you could drink it, it'd taste terrible. it's methanol and ethanol mixed with a bunch of toxic stuff.",
+      "light from the Sun takes about 8 minutes to reach Earth. light from the next closest star, Proxima Centauri, takes over 4 years.",
+      "space is completely silent — sound needs a medium to travel through, and space is a vacuum. explosions in space films are nonsense.",
+    ]
+  },
+
+  { tags: ["black hole","black holes","event horizon","singularity","spaghettification"],
+    replies: [
+      "black holes are regions where gravity is so strong not even light can escape. the boundary is called the event horizon — cross it and you're not coming back. if you got too close to a small black hole, tidal forces would stretch you into a strand of atoms. scientists actually call this 'spaghettification.'",
+      "at the center of the Milky Way there's a supermassive black hole called Sagittarius A* — it's about 4 million times the mass of the Sun. we've actually imaged it now, which is a massive deal.",
+    ]
+  },
+
+  { tags: ["exoplanet","exoplanets","other planets","planet outside","alien planet","kepler","habitable zone"],
+    replies: [
+      "as of now we've confirmed over 5,500 exoplanets — planets orbiting stars other than our Sun. some of them are in the 'habitable zone,' meaning liquid water could exist on their surface. we haven't found life yet but the odds are looking increasingly non-zero.",
+    ]
+  },
+
+  { tags: ["mars","red planet","mars mission","life on mars","martian"],
+    replies: [
+      "Mars is the most explored planet besides Earth. it has the tallest volcano in the solar system (Olympus Mons, 3x the height of Everest) and a canyon that'd stretch across the US. signs of ancient water are everywhere. whether there was life? still unknown.",
+    ]
+  },
+
+  { tags: ["moon","lunar","moonwalk","apollo","luna"],
+    replies: [
+      "the Moon is slowly drifting away from Earth — about 3.8cm per year. in the distant past it was much closer and caused massive tides. also, only 12 humans have ever walked on it, all between 1969 and 1972.",
+    ]
+  },
+
+  { tags: ["quantum","quantum physics","quantum mechanics","superposition","entanglement","quantum stuff"],
+    replies: [
+      "quantum mechanics is the physics of very small things, and it's genuinely strange. particles can exist in multiple states at once (superposition) until observed. two particles can be entangled across any distance — measuring one instantly affects the other. Einstein called entanglement 'spooky action at a distance' and he hated it.",
+    ]
+  },
+
+  { tags: ["dark matter","dark energy","what is dark matter"],
+    replies: [
+      "dark matter makes up about 27% of the universe but we can't see or directly detect it — we know it exists because of how galaxies rotate and how gravity behaves at large scales. dark energy is even weirder: it's causing the universe to expand faster and faster. together they're about 95% of everything. we have no idea what either actually is.",
+    ]
+  },
+
+  { tags: ["wormhole","wormholes","time travel","faster than light","ftl","warp drive"],
+    replies: [
+      "wormholes are theoretically allowed by general relativity — basically shortcuts through spacetime. the problem: they'd require exotic matter with negative energy to stay open, and we've never found that. faster-than-light travel runs into similar issues. might be impossible, might not — physics hasn't fully closed the door yet.",
+    ]
+  },
+
+  { tags: ["milky way","our galaxy","galaxy","galaxies","andromeda"],
+    replies: [
+      "the Milky Way is a barred spiral galaxy containing 200-400 billion stars. it's about 100,000 light-years across. oh, and it's on a collision course with the Andromeda galaxy — but that's about 4.5 billion years away, so not an urgent problem.",
+    ]
+  },
+
+  { tags: ["big bang","origin of universe","how did the universe start","universe beginning","cosmology"],
+    replies: [
+      "the Big Bang wasn't an explosion in space — it was an expansion of space itself, starting from an incredibly hot, dense point about 13.8 billion years ago. the cosmic microwave background radiation is the leftover glow from that event, and we can still detect it today.",
+    ]
+  },
+
+  { tags: ["space travel","astronaut","nasa","iss","international space station","space exploration"],
+    replies: [
+      "the ISS has been continuously inhabited since November 2000. it travels at about 28,000 km/h and orbits Earth roughly every 90 minutes — meaning astronauts see about 16 sunrises per day. NASA, SpaceX, ESA and others are all working on getting humans to Mars in the coming decades.",
+    ]
+  },
+
+  { tags: ["fermi paradox","where is everyone","alien life","extraterrestrial","aliens","are we alone","great filter"],
+    replies: [
+      "the Fermi Paradox: given the age and size of the universe, statistically there should be loads of advanced civilizations — so why haven't we heard from any? possible answers range from 'they all destroy themselves before they can communicate' (the Great Filter) to 'they're out there but ignoring us' to 'we just haven't looked hard enough.' nobody knows. it's one of the most unsettling open questions in science.",
+    ]
+  },
+
+  // ── CONTACT ───────────────────────────────────────────────────────────────
+  { tags: ["contact","reach out","get in touch","email","how to contact","connect","links"],
+    replies: [
+      "you can reach Advit at advit791@gmail.com, on Discord as Nightrider_8368, or on GitHub at github.com/advit791.",
+    ]
+  },
+
+  // ── ABOUT THIS CHATBOT ────────────────────────────────────────────────────
+  { tags: ["who are you","what are you","are you ai","are you a bot","how do you work","what kind of ai","are you chatgpt","are you gemini","are you claude"],
+    replies: [
+      "i'm the Orbiter AI — a chatbot built specifically for this site. i'm not ChatGPT or Gemini, just a smart knowledge base about Orbiter, the founders, and space. i work instantly with no external API.",
+      "i'm a custom chatbot built into Orbiter. i know a lot about this project, Advit, Shaurya, and space. no external AI service — just built-in knowledge.",
+    ]
+  },
+
+  { tags: ["what can you do","what do you know","capabilities","help","what can i ask","what questions"],
+    replies: [
+      "i can answer questions about Orbiter, the game, how it was built, who Advit and Shaurya are, and space/science topics. try me.",
+      "ask me about the game, the founders, the hackathon, the tech stack, or anything space-related. that's my wheelhouse.",
+    ]
+  },
+
+  // ── COMPLIMENTS / REACTIONS ───────────────────────────────────────────────
+  { tags: ["cool","awesome","nice","great","amazing","love it","this is great","sick","fire","dope","impressive","love this"],
+    replies: [
+      "glad you think so. Advit and Shaurya put a lot into it.",
+      "yeah it's a pretty solid project for a hackathon build.",
+      "thanks! the team worked hard on it.",
+    ]
+  },
+
+  { tags: ["thanks","thank you","thx","ty","cheers","appreciate"],
+    replies: [
+      "no problem! anything else you want to know?",
+      "anytime. what else?",
+      "sure thing.",
+    ]
+  },
+
+  // ── FALLBACK HANDLED IN CODE ──────────────────────────────────────────────
+];
+
+const FALLBACKS = [
+  "hmm, not sure about that one. try asking about the game, the founders, or space — that's where i'm strong.",
+  "i don't have a great answer for that. ask me about Orbiter, Advit, Shaurya, or space stuff.",
+  "that's outside what i know well. i'm better on topics like the game, the team, or space facts — try one of those?",
+  "not in my knowledge base. hit me with something about Orbiter or the cosmos instead.",
+];
+
+function getReply(input) {
+  const q = input.toLowerCase().replace(/[^\w\s]/g, " ");
+  const words = q.split(/\s+/);
+
+  let bestMatch = null;
+  let bestScore = 0;
+
+  for (const entry of KB) {
+    let score = 0;
+    for (const tag of entry.tags) {
+      if (q.includes(tag)) {
+        score += tag.split(" ").length * 2; // longer tag matches score higher
+      }
+    }
+    // also check individual words
+    for (const tag of entry.tags) {
+      for (const word of words) {
+        if (word.length > 3 && tag.includes(word)) score += 1;
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = entry;
+    }
+  }
+
+  if (bestMatch && bestScore >= 2) {
+    const replies = bestMatch.replies;
+    return replies[Math.floor(Math.random() * replies.length)];
+  }
+
+  return FALLBACKS[Math.floor(Math.random() * FALLBACKS.length)];
+}
+
+// ─── UI ────────────────────────────────────────────────────────────────────────
 function autoGrow(el) {
   el.style.height = "auto";
   el.style.height = Math.min(el.scrollHeight, 160) + "px";
@@ -228,10 +516,10 @@ function suggest(btn) {
   sendMessage();
 }
 
-function appendMsg(role, text, isError = false) {
+function appendMsg(role, text) {
   const wrap = document.getElementById("messages");
   const div = document.createElement("div");
-  div.className = "msg " + role + (isError ? " err" : "");
+  div.className = "msg " + role;
   const label = document.createElement("span");
   label.className = "msg-label";
   label.textContent = role === "user" ? "you" : "Orbiter AI";
@@ -262,59 +550,21 @@ function removeTyping() {
   if (el) el.remove();
 }
 
-async function sendMessage() {
-  if (isLoading) return;
+function sendMessage() {
   const input = document.getElementById("userInput");
   const text = input.value.trim();
   if (!text) return;
 
   input.value = ""; autoGrow(input);
-  document.getElementById("sendBtn").disabled = true;
-  isLoading = true;
   document.getElementById("suggestions").style.display = "none";
-
   appendMsg("user", text);
-  history.push({ role: "user", parts: [{ text }] });
+
   showTyping();
-
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM }] },
-          contents: history,
-          generationConfig: { maxOutputTokens: 400, temperature: 0.85 }
-        })
-      }
-    );
-
-    const data = await res.json();
+  // small delay so it feels like it's "thinking"
+  setTimeout(() => {
     removeTyping();
-
-    if (data.error) {
-      // show the REAL error message so we know exactly what's wrong
-      appendMsg("ai", `API error ${data.error.code}: ${data.error.message}`, true);
-      document.getElementById("statusDot").className = "dot error";
-      document.getElementById("statusText").textContent = "api error · check console";
-      console.error("Gemini error:", data.error);
-      history.pop();
-    } else {
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "hmm, no response — try again?";
-      history.push({ role: "model", parts: [{ text: reply }] });
-      appendMsg("ai", reply);
-    }
-  } catch (err) {
-    removeTyping();
-    appendMsg("ai", `network error: ${err.message}`, true);
-    console.error("Fetch error:", err);
-    history.pop();
-  }
-
-  isLoading = false;
-  document.getElementById("sendBtn").disabled = false;
+    appendMsg("ai", getReply(text));
+  }, 600 + Math.random() * 400);
 }
 </script>
 </body>
